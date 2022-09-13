@@ -3,7 +3,7 @@ fetch(`http://localhost:3000/api/products`)
     .then(data => displayProducts(data));
 
 function displayProducts(data) {
-    console.log(data)
+    
     let myItems = document.getElementById('items');
     for (let i = 0; i < data.length; i++) {
 
@@ -25,6 +25,9 @@ function displayProducts(data) {
         let productDescripion = document.createElement("p");
         productDescripion.innerText = data[i].description;
         article.appendChild(productDescripion);
+
+        myItems.appendChild(product);
+        console.log(product);
 
     }
 

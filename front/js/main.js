@@ -1,7 +1,7 @@
 fetch(`http://localhost:3000/api/products`)
     .then(Response => Response.json())
     .then(data => displayProducts(data));
-
+     console.log(data);
 function displayProducts(data) {
     
     let myItems = document.getElementById('items');
@@ -27,7 +27,7 @@ function displayProducts(data) {
         article.appendChild(productDescripion);
 
         myItems.appendChild(product);
-        console.log(product);
+        // console.log(product);
 
     }
 

@@ -33,13 +33,19 @@ fetch('http://localhost:3000/api/products/'+ idParam)
         }
 
         let itemQuantity = document.getElementById('quantity');
+
         document.getElementById('addToCart').addEventListener('click', function () {
             if ((itemColor.value == "") || (itemQuantity.value == 0)) {
                 // let alertMsg = document.getElementsByClassName('item__content__settings__quantity');
                  alert('please select color and quantity');
             } else {
-                data.itemQuantity = itemQuantity;
-                data. itemColor = itemColor;
+
+                let selectProudect = data;
+                let itemColor = document.getElementById('colors').value;
+                let itemQuantity = document.getElementById('quantity').value;
+
+                selectProudect.itemQuantity = itemQuantity;
+                selectProudect. itemColor = itemColor;
             }
             if (localStorage.getItem('cart') != null) {
                 let cart = JSON.parse(localStorage.getItem('cart'));//

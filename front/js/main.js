@@ -1,9 +1,10 @@
+
 fetch(`http://localhost:3000/api/products`)
     .then(Response => Response.json())
     .then(data => displayProducts(data));
     //  console.log(data);
 function displayProducts(data) {
-    console.log(data)
+    // console.log(data)
     
     let myItems = document.getElementById('items');
     for (let i = 0; i < data.length; i++) {

@@ -44,8 +44,8 @@ fetch('http://localhost:3000/api/products/'+ idParam)
                 let itemColor = document.getElementById('colors').value;
                 let itemQuantity = document.getElementById('quantity').value;
 
-                selectProudect.itemQuantity = itemQuantity;
-                selectProudect. itemColor = itemColor;
+                selectProudect.quantity = itemQuantity;
+                selectProudect. colors = itemColor;
             }
             if (localStorage.getItem('cart') != null) {
                 let cart = JSON.parse(localStorage.getItem('cart'));//

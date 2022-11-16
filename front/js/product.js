@@ -48,12 +48,12 @@ fetch('http://localhost:3000/api/products/'+ idParam)
                 selectProudect. colors = itemColor;
             }
             if (localStorage.getItem('cart') != null) {
-                let cart = JSON.parse(localStorage.getItem('cart'));//
+                let cart = JSON.parse(localStorage.getItem('cart'));
                 cart.push(data);
-                localStorage.setItem('cart', JSON.stringify(cart));//
+                localStorage.setItem('cart', JSON.stringify(cart));
 
             } else {
-                localStorage.setItem('cart', JSON.stringify([data]));//
+                localStorage.setItem('cart', JSON.stringify([data]));
             }
         })
     })

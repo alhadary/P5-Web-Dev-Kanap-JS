@@ -1,10 +1,11 @@
 let cartFromlocalstorage = localStorage.getItem("cart");
 let products = JSON.parse(cartFromlocalstorage);
 // console.log(cartFromlocalstorage);
-
-products.forEach(product => {
-      populateCart(product);
- });
+if (products != null) {
+  products.forEach(product => {
+    populateCart(product);
+  });
+};
 function populateCart(product) {
 
     let cartItem = document.getElementById("cart__items");
@@ -85,5 +86,97 @@ function populateCart(product) {
     cartDelte.appendChild(delteItem);
     
 
-    console.log(article);
+    // console.log(article);
 }
+
+            //Form Vlaidaton
+document.getElementById("order").addEventListener("click", function (e) {
+  e.preventDefault();
+  validateinputs()
+     if (products == null || products.length ==0) {
+               alert('Your cart is empty')
+          }else {
+              processForm(e) 
+          }
+});
+let productTosubmit = [];
+
+function processForm(e) {                       
+    
+     let customerInfoTosSUbmit = {
+  contact: {
+    firstName: document.getElementById('firstName').value,
+    lastName: document.getElementById('lastName').value,
+    address: document.getElementById('address').value,
+    city: document.getElementById('city').value,
+    email: document.getElementById('email').value,
+  },
+  products: productTosubmit,
+};
+  console.log(customerInfoTosSUbmit);
+    products.forEach(selectedProudect => {
+    productTosubmit.push(selectedProudect._id)
+    });
+    fetch('http://localhost:3000/api/products/order', {
+    method: 'Post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(customerInfoTosSUbmit),
+  })
+    .then(response => response.json())
+    .then(data => {
+      //  console.log(data)
+      sessionStorage.setItem('orderId', data.orderId)
+      window.location.href = 'confirmation.html';
+    });
+};
+
+
+
+  function validateinputs() {
+    document.getElementById('firstNameErrorMsg').innerText = "";
+    document.getElementById('lastNameErrorMsg').innerText = "";
+    document.getElementById('addressErrorMsg').innerText = "";
+    document.getElementById('addressErrorMsg').innerText = "";
+    document.getElementById('cityErrorMsg').innerText = "";
+    document.getElementById('emailErrorMsg').innerText = "";
+
+    let isFormmvalid = true;
+  
+    if (document.getElementById('firstName').value == "") {
+      document.getElementById('firstNameErrorMsg').innerText = "Name is empty";
+         
+      isFormmvalid = true;
+    }
+    if (document.getElementById('lastName').value == "") {
+      document.getElementById('lastNameErrorMsg').innerText = "Last Name is empty";
+         
+      isFormmvalid = false;
+    }
+    if (document.getElementById('address').value == "") {
+      document.getElementById('addressErrorMsg').innerText = "The address is empty";
+         
+      isFormmvalid = false;
+    }
+    if (document.getElementById('city').value == "") {
+      document.getElementById('cityErrorMsg').innerText = "The City is empty";
+      isFormmvalid = false;
+    }
+  
+    let emailreg = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+
+    if (!emailreg.test(document.getElementById('email').value)) {
+              
+      document.getElementById('emailErrorMsg').innerText = "The email address is not correct";
+      isFormmvalid = false;
+    }
+  
+    return isFormmvalid;     
+    
+     
+}
+  
+
+  
+
+          
+

@@ -188,7 +188,51 @@ function calculateTotals() {
 
   });
 };
+//////////////// need more works////
+function qutChange() {
   
+     var item = this.closest('article');
+     let _id = item.dataset.id;  
+     let color = item.dataset.color;  
+     let newQut = this.value;
+    
+     var updatd_product = products.find(x => x._id == _id & x.color == color );
+     updatd_product = newQut;
+    
+     localStorage.setItem('cart', JSON.stringify(  products));
+     
+     calculateTotals();
+     
+}
+let inputs = document.getElementsByClassName('itemQuantity');
+for (let i of inputs) {
+  i.addEventListener('change', qutChange);
+}
+//////////////Delete Items///////////
+
+  const removeItems = document.querySelectorAll('.deleteItem');
+
+removeItems.forEach(item => {
+  item.addEventListener('click', function handleClick(e) {
+       e.preventDefault();
+       var id = this.closest("article").dataset.id;
+       var color = this.closest("article").dataset.color;
+    
+       let index = products.findIndex(x => x._id == id && x.color == color);
+       products.splice(index, 1)
+       var newCart = products
+       localStorage.setItem('cart', JSON.stringify(newCart));
+   
+         let cartItem = document.getElementById("cart__items");
+       cartItem.innerHTML = '';
+       products = newCart
+       newCart.forEach(product => {
+      populateCart(product);
+ });
+
+calculateTotals();
+  });
+});
 
           
 

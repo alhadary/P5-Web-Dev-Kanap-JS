@@ -10,7 +10,7 @@ fetch('http://localhost:3000/api/products/'+ idParam)
         // let itemImage = document.getElementsByClassName("item__img")[0].getElementsByTagName('img');
         let itemImage = document.getElementsByClassName("item__img")[0].getElementsByTagName('img');
 
-        console.log(itemImage)
+        // console.log(itemImage)
         itemImage[0].setAttribute('src', data.imageUrl);
         itemImage[0].setAttribute('alt', data.altTxt);
         

@@ -1,5 +1,6 @@
 let cartFromlocalstorage = localStorage.getItem("cart");
 let products = JSON.parse(cartFromlocalstorage);
+calculateTotals();
 // console.log(cartFromlocalstorage);
 if (products != null) {
   products.forEach(product => {
@@ -130,8 +131,6 @@ function processForm(e) {
     });
 };
 
-
-
   function validateinputs() {
     document.getElementById('firstNameErrorMsg').innerText = "";
     document.getElementById('lastNameErrorMsg').innerText = "";
@@ -174,8 +173,21 @@ function processForm(e) {
     
      
 }
-  
 
+     // Calculate totals
+  
+function calculateTotals() {
+  Alltotal = 0;
+  Alluantity = 0;
+  products.forEach(product => {
+    let total = parseInt(product.price) * parseInt(product.quantity);
+    Alltotal += total;
+    Alluantity += parseInt(product.quantity);
+    document.getElementById('totalQuantity').innerText = Alluantity;
+    document.getElementById('totalPrice').innerText = Alltotal;
+
+  });
+};
   
 
           

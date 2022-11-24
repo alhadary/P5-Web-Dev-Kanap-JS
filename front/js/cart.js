@@ -1,6 +1,6 @@
 let cartFromlocalstorage = localStorage.getItem("cart");
 let products = JSON.parse(cartFromlocalstorage);
-calculateTotals();
+//calculateTotals();
 // console.log(cartFromlocalstorage);
 if (products != null) {
   products.forEach(product => {
@@ -15,7 +15,7 @@ function populateCart(product) {
 
     article.className = ("cart__item");
     article.setAttribute('data-id', product._id);
-    article.setAttribute('data-color', product.color);
+    article.setAttribute('data-color', product.colors);
     cartItem.appendChild(article);
 
     let imageDev = document.createElement("div");
@@ -83,10 +83,37 @@ function populateCart(product) {
     
     let delteItem = document.createElement("p");
     delteItem.className = 'deleteItem';
-    delteItem.innerText = 'Delete';
-    cartDelte.appendChild(delteItem);
-    
+  delteItem.innerText = 'Delete';
+  cartDelte.appendChild(delteItem);
+  //delteItem.onclick = deletecartItem(delteItem)
+  calculateTotals();
+    let removeItems = document.querySelectorAll('.deleteItem');
 
+removeItems.forEach(item => {
+  item.addEventListener('click', function () {
+       //e.preventDefault();
+       var id = this.closest("article").dataset.id;
+       var color = this.closest("article").dataset.color;
+    
+       let index = products.findIndex(x => x._id == id && x.colors == color);
+    if(index == -1) return true  
+    products.splice(index, 1)
+       var newCart = products
+       localStorage.setItem('cart', JSON.stringify(newCart));
+   
+         let cartItem = document.getElementById("cart__items");
+       cartItem.innerHTML = '';
+    products = newCart
+    
+       newCart.forEach(product => {
+         populateCart(product);
+         
+ });
+calculateTotals();
+
+  });
+});
+calculateTotals();
     // console.log(article);
 }
 
@@ -179,14 +206,19 @@ function processForm(e) {
 function calculateTotals() {
   Alltotal = 0;
   Alluantity = 0;
-  products.forEach(product => {
-    let total = parseInt(product.price) * parseInt(product.quantity);
-    Alltotal += total;
-    Alluantity += parseInt(product.quantity);
-    document.getElementById('totalQuantity').innerText = Alluantity;
-    document.getElementById('totalPrice').innerText = Alltotal;
+  if (products.length > 0) {
+    products.forEach(product => {
+      let total = parseInt(product.price) * parseInt(product.quantity);
+      Alltotal += total;
+      Alluantity += parseInt(product.quantity);
+      document.getElementById('totalQuantity').innerText = Alluantity;
+      document.getElementById('totalPrice').innerText = Alltotal;
 
-  });
+    });
+  } else {
+     document.getElementById('totalQuantity').innerText = Alluantity;
+      document.getElementById('totalPrice').innerText = Alltotal;
+  }
 };
 //////////////// need more works////
 function qutChange() {
@@ -210,29 +242,25 @@ for (let i of inputs) {
 }
 //////////////Delete Items///////////
 
-  const removeItems = document.querySelectorAll('.deleteItem');
+  
 
-removeItems.forEach(item => {
-  item.addEventListener('click', function handleClick(e) {
-       e.preventDefault();
-       var id = this.closest("article").dataset.id;
-       var color = this.closest("article").dataset.color;
+// function deletecartItem(item) {
+//   console.log(item)
+//   var id = item.closest("article").dataset.id;
+//        var color = item.closest("article").dataset.color;
     
-       let index = products.findIndex(x => x._id == id && x.color == color);
-       products.splice(index, 1)
-       var newCart = products
-       localStorage.setItem('cart', JSON.stringify(newCart));
+//        let index = products.findIndex(x => x._id == id && x.colors == color);
+//        products.splice(index, 1)
+//        var newCart = products
+//        localStorage.setItem('cart', JSON.stringify(newCart));
    
-         let cartItem = document.getElementById("cart__items");
-       cartItem.innerHTML = '';
-       products = newCart
-       newCart.forEach(product => {
-      populateCart(product);
- });
+//          let cartItem = document.getElementById("cart__items");
+//        cartItem.innerHTML = '';
+//        products = newCart
+//        newCart.forEach(product => {
+//       populateCart(product);
+//  });
 
-calculateTotals();
-  });
-});
-
+//}
           
 

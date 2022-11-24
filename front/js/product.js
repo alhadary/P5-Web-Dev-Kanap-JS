@@ -3,7 +3,7 @@ let urlParams = new URLSearchParams(window.location.search);
 let idParam = urlParams.get('id');
 // console.log(idParam);
 //  console.log('test');
-fetch('http://localhost:3000/api/products/'+ idParam)
+fetch('http://localhost:3000/api/products/' + idParam)
     .then(res => res.json())
     .then(data => {
 
@@ -25,7 +25,7 @@ fetch('http://localhost:3000/api/products/'+ idParam)
         itemDescription.innerHTML = data.description;
 
         let itemColor = document.getElementById('colors');
-        for (i = 0; i <= data.colors.length; i++){
+        for (i = 0; i <= data.colors.length; i++) {
             let selectOption = document.createElement('option');
             // selectOption.value = data.colors[i];
             selectOption.textContent = data.colors[i];
@@ -37,7 +37,7 @@ fetch('http://localhost:3000/api/products/'+ idParam)
         document.getElementById('addToCart').addEventListener('click', function () {
             if ((itemColor.value == "") || (itemQuantity.value == 0)) {
                 // let alertMsg = document.getElementsByClassName('item__content__settings__quantity');
-                 alert('please select color and quantity');
+                alert('please select color and quantity');
             } else {
 
                 let selectProudect = data;
@@ -45,23 +45,33 @@ fetch('http://localhost:3000/api/products/'+ idParam)
                 let itemQuantity = document.getElementById('quantity').value;
 
                 selectProudect.quantity = itemQuantity;
-                selectProudect. colors = itemColor;
-            }
-            if (localStorage.getItem('cart') != null) {
-                let cart = JSON.parse(localStorage.getItem('cart'));
-                cart.push(data);
-                localStorage.setItem('cart', JSON.stringify(cart));
+                selectProudect.colors = itemColor;
+            
+                if (localStorage.getItem('cart') != null) {
+                    let cart = JSON.parse(localStorage.getItem('cart'));
+                    ////
+                    let index = cart.findIndex(x => x._id == selectProudect._id && x.colors == selectProudect.colors)
+                    if (index == -1) {
+                        cart.push(selectProudect);
 
-            } else {
-                localStorage.setItem('cart', JSON.stringify([data]));
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                    } else {
+                        cart[index].quantity = parseInt(cart[index].quantity) + parseInt(selectProudect.quantity)
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                    }
+                    // cart.push(selectProudect);
+                    // localStorage.setItem('cart', JSON.stringify(cart));
+            
+                } else {
+                    localStorage.setItem('cart', JSON.stringify([selectProudect]));
+                }
             }
         })
-    })
-.catch()
+        });
 
        
        
         
 
   
-
+    

@@ -1,8 +1,9 @@
 
 let urlParams = new URLSearchParams(window.location.search);
 let idParam = urlParams.get('id');
-// console.log(idParam);
-//  console.log('test');
+
+//shwing the prduct Image, name ,price ,description and colors using DOM
+
 fetch('http://localhost:3000/api/products/' + idParam)
     .then(res => res.json())
     .then(data => {
@@ -41,16 +42,20 @@ fetch('http://localhost:3000/api/products/' + idParam)
             } else {
 
                 let selectProudect = data;
+                delete selectProudect.price;
                 let itemColor = document.getElementById('colors').value;
                 let itemQuantity = document.getElementById('quantity').value;
 
                 selectProudect.quantity = itemQuantity;
                 selectProudect.colors = itemColor;
-            
+                //stor the selected products in local storage
+                
                 if (localStorage.getItem('cart') != null) {
                     let cart = JSON.parse(localStorage.getItem('cart'));
-                    ////
+                    console.log(cart);
                     let index = cart.findIndex(x => x._id == selectProudect._id && x.colors == selectProudect.colors)
+                    
+
                     if (index == -1) {
                         cart.push(selectProudect);
 
@@ -61,10 +66,12 @@ fetch('http://localhost:3000/api/products/' + idParam)
                     }
                     // cart.push(selectProudect);
                     // localStorage.setItem('cart', JSON.stringify(cart));
-            
+                    console.log(selectProudect);
                 } else {
                     localStorage.setItem('cart', JSON.stringify([selectProudect]));
                 }
+                                    // console.log(selectProudect.splice('price',2));
+
             }
         })
         });

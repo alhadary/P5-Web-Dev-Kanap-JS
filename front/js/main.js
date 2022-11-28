@@ -3,6 +3,9 @@ fetch(`http://localhost:3000/api/products`)
     .then(Response => Response.json())
     .then(data => displayProducts(data));
     //  console.log(data);
+
+    //Inserting the products into the homepage using DOM
+    
 function displayProducts(data) {
     // console.log(data)
     

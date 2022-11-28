@@ -1,14 +1,28 @@
+//get items from local storage in cart page
 let cartFromlocalstorage = localStorage.getItem("cart");
 let products = JSON.parse(cartFromlocalstorage);
-//calculateTotals();
-// console.log(cartFromlocalstorage);
+
+
 if (products != null) {
   products.forEach(product => {
+    
     populateCart(product);
   });
 };
-function populateCart(product) {
 
+//showing the selected items description in cart page
+
+async function populateCart(product) {
+     let  Price
+  
+  
+  product.price  = await  fetch('http://localhost:3000/api/products/' + product._id)
+        .then(res => res.json())
+    .then(data => {
+      Price = data.price
+      return Price
+        });
+  console.log('price',product)
     let cartItem = document.getElementById("cart__items");
 
     let article = document.createElement("article");
@@ -42,11 +56,13 @@ function populateCart(product) {
 
     let productColor = document.createElement("p");
     productColor.innerHTML= product.colors;//
-    cartDesc.appendChild(productColor);
+  cartDesc.appendChild(productColor);
+         // console.log(product);
 
+  //console.log(product.price);
     let productPrice = document.createElement("p");
-    productPrice.innerText= product.description;
-    productPrice.innerHTML=product.price;
+    // productPrice.innerText= product.description;
+    productPrice.innerText=product.price ? product.price : Price;
 
     cartDesc.appendChild(productPrice);
 
@@ -98,9 +114,11 @@ removeItems.forEach(item => {
        let index = products.findIndex(x => x._id == id && x.colors == color);
     if(index == -1) return true  
     products.splice(index, 1)
-       var newCart = products
+    var newCart = products
+    
        localStorage.setItem('cart', JSON.stringify(newCart));
-   
+    
+    // console.log(cart);
          let cartItem = document.getElementById("cart__items");
        cartItem.innerHTML = '';
     products = newCart
@@ -117,18 +135,25 @@ calculateTotals();
     // console.log(article);
 }
 
-            //Form Vlaidaton
+  
+
+// adding click event on orded button
 document.getElementById("order").addEventListener("click", function (e) {
   e.preventDefault();
-  validateinputs()
-     if (products == null || products.length ==0) {
+  var formIsvalied =validateinputs();
+  
+     if (products == null || products.length ==0 ) {
                alert('Your cart is empty')
-          }else {
+     }
+     else if (formIsvalied == false) {
+       return;
+  }
+     else {
               processForm(e) 
-          }
+  }
 });
 let productTosubmit = [];
-
+     // processForm to check user input
 function processForm(e) {                       
     
      let customerInfoTosSUbmit = {
@@ -158,6 +183,8 @@ function processForm(e) {
     });
 };
 
+     //Form Vlaidaton
+
   function validateinputs() {
     document.getElementById('firstNameErrorMsg').innerText = "";
     document.getElementById('lastNameErrorMsg').innerText = "";
@@ -171,7 +198,7 @@ function processForm(e) {
     if (document.getElementById('firstName').value == "") {
       document.getElementById('firstNameErrorMsg').innerText = "Name is empty";
          
-      isFormmvalid = true;
+      isFormmvalid = false;
     }
     if (document.getElementById('lastName').value == "") {
       document.getElementById('lastNameErrorMsg').innerText = "Last Name is empty";
@@ -201,13 +228,15 @@ function processForm(e) {
      
 }
 
-     // Calculate totals
+     // calculate the total products cost
   
 function calculateTotals() {
   Alltotal = 0;
   Alluantity = 0;
   if (products.length > 0) {
     products.forEach(product => {
+
+
       let total = parseInt(product.price) * parseInt(product.quantity);
       Alltotal += total;
       Alluantity += parseInt(product.quantity);
@@ -220,7 +249,8 @@ function calculateTotals() {
       document.getElementById('totalPrice').innerText = Alltotal;
   }
 };
-//////////////// need more works////
+ // changing the quantaty and total when user change the quantaty
+
 function qutChange() {
   
      var item = this.closest('article');
@@ -231,7 +261,7 @@ function qutChange() {
      var updatd_product = products.find(x => x._id == _id & x.color == color );
      updatd_product = newQut;
     
-     localStorage.setItem('cart', JSON.stringify(  products));
+     localStorage.setItem('cart', JSON.stringify( products));
      
      calculateTotals();
      
@@ -239,6 +269,7 @@ function qutChange() {
 let inputs = document.getElementsByClassName('itemQuantity');
 for (let i of inputs) {
   i.addEventListener('change', qutChange);
+  
 }
 //////////////Delete Items///////////
 

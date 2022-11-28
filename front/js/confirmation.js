@@ -1,4 +1,5 @@
 
+//displaying the order number in conformation page and clear the localstorge
 
 let confirm = document.getElementsByClassName('confirmation');
 
